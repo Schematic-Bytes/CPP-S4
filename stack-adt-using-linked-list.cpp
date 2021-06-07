@@ -4,7 +4,7 @@ template <class Item>
 class Stack
 {
 private:
-    LinkedList<int> stack;
+    LinkedList<int> list;
 
 public:
     void push(Item y); //pushes int y to stack
@@ -15,21 +15,21 @@ public:
 template <class Item>
 void Stack<Item>::push(Item y)
 {
-    stack.addHead(y);
+    list.addHead(y);
 }
 
 template <class Item>
 Item Stack<Item>::pop()
 {
     int it;
-    it = stack.removeHead();
+    it = list.removeHead();
     return it;
 }
 
 template <class Item>
 void Stack<Item>::Display()
 {
-    stack.display();
+    list.display();
 }
 
 int main()
