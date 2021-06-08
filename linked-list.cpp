@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stdlib.h>
+
 using namespace std;
+
 template <class Item>
 class LinkedList
 {
@@ -82,6 +84,11 @@ void LinkedList<Item>::addHead(Item item)
 template <class Item>
 Item LinkedList<Item>::removeHead()
 {
+    if (head_node == NULL)
+    {
+        cout << "No head to remove\n";
+        return 0;
+    }
     Node *oldNode = head_node;
     Item returnVal = head_node->value;
     head_node = head_node->next_node;
@@ -105,7 +112,12 @@ void LinkedList<Item>::addTail(Item item)
 template <class Item>
 Item LinkedList<Item>::removeTail()
 {
-    if (head_node == tail_node)
+    if (tail_node == NULL)
+    {
+        cout << "No tail to remove\n";
+        return 0;
+    }
+    else if (head_node == tail_node)
         return removeHead();
     Node *preTail = head_node;
     Item returnVal = tail_node->value;
