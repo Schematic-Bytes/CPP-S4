@@ -1,6 +1,3 @@
-#ifndef LINKED_LIST
-#define LINKED_LIST
-
 #include <iostream>
 #include <stdlib.h>
 
@@ -10,21 +7,23 @@ template <class Item>
 class LinkedList
 {
 private:
+    // sub-class Node
     class Node
     {
         friend class LinkedList;
 
     private:
         Item value;
-        Node *next;
+        Node *next_node;
 
     public:
         Node(Item val, Node *nx = NULL)
         {
             value = val;
-            next = nx;
+            next_node = nx;
         }
-    } * m_head, *m_tail;
+    } * head_node, *tail_node; // pointer pointing to the head node and tail node
+    // total size of the linked list
     int m_size;
 
 public:
@@ -40,50 +39,56 @@ public:
     void display();
     Item remove(int n); //remove the node at position n
 };
+// constructor
 template <class Item>
 LinkedList<Item>::LinkedList()
 {
-    m_head = NULL;
-    m_tail = NULL;
+    head_node = NULL;
+    tail_node = NULL;
     m_size = 0;
 }
+// deconstructor
 template <class Item>
 LinkedList<Item>::~LinkedList()
 {
-    Node *here = m_head, *nextNode;
+    Node *here = head_node, *nextNode;
     while (here != NULL)
     {
-        nextNode = here->next;
+        nextNode = here->next_node;
         delete here;
         here = nextNode;
     }
 }
+// size method
 template <class Item>
 int LinkedList<Item>::size()
 {
     return m_size;
 }
+// is empty method
 template <class Item>
 int LinkedList<Item>::isEmpty()
 {
-    return (m_size);
+    return m_size;
 }
+// add head method
 template <class Item>
 void LinkedList<Item>::addHead(Item item)
 {
-    m_head = new Node(item, m_head);
-    if (m_tail == NULL)
-        m_tail = m_head;
+    head_node = new Node(item, head_node);
+    if (tail_node == NULL)
+        tail_node = head_node;
     m_size++;
 }
+//
 template <class Item>
 Item LinkedList<Item>::removeHead()
 {
-    Node *oldNode = m_head;
-    Item returnVal = m_head->value;
-    m_head = m_head->next;
-    if (m_head == NULL)
-        m_tail = NULL;
+    Node *oldNode = head_node;
+    Item returnVal = head_node->value;
+    head_node = head_node->next_node;
+    if (head_node == NULL)
+        tail_node = NULL;
     m_size--;
     delete oldNode;
     return returnVal;
@@ -91,26 +96,26 @@ Item LinkedList<Item>::removeHead()
 template <class Item>
 void LinkedList<Item>::addTail(Item item)
 {
-    if (isEmpty())
+    if (isEmpty() == 0)
         addHead(item);
     else
     {
-        m_tail = m_tail->next = new Node(item);
+        tail_node = tail_node->next_node = new Node(item);
         m_size++;
     }
 }
 template <class Item>
 Item LinkedList<Item>::removeTail()
 {
-    if (m_head == m_tail)
+    if (head_node == tail_node)
         return removeHead();
-    Node *preTail = m_head;
-    Item returnVal = m_tail->value;
-    while (preTail->next != m_tail)
-        preTail = preTail->next;
-    preTail->next = NULL;
-    delete m_tail;
-    m_tail = preTail;
+    Node *preTail = head_node;
+    Item returnVal = tail_node->value;
+    while (preTail->next_node != tail_node)
+        preTail = preTail->next_node;
+    preTail->next_node = NULL;
+    delete tail_node;
+    tail_node = preTail;
     m_size--;
     return returnVal;
 }
@@ -123,10 +128,10 @@ void LinkedList<Item>::insert(int n, Item item)
         addTail(item);
     else
     {
-        Node *here = m_head;
+        Node *here = head_node;
         for (int k = 1; k < n - 1; k++)
-            here = here->next;
-        here->next = new Node(item, here->next);
+            here = here->next_node;
+        here->next_node = new Node(item, here->next_node);
         m_size++;
     }
 }
@@ -137,12 +142,12 @@ Item LinkedList<Item>::remove(int n)
         return removeHead();
     if (n == size())
         return removeTail();
-    Node *here = m_head;
+    Node *here = head_node;
     for (int k = 1; k < n - 1; k++)
-        here = here->next;
-    Node *kill = here->next;
+        here = here->next_node;
+    Node *kill = here->next_node;
     Item returnVal = kill->value;
-    here->next = kill->next;
+    here->next_node = kill->next_node;
     delete kill;
     m_size--;
     return returnVal;
@@ -156,13 +161,11 @@ void LinkedList<Item>::display()
     }
     else
     {
-        Node *here = m_head;
+        Node *here = head_node;
         while (here != NULL)
         {
             cout << here->value;
-            here = here->next;
+            here = here->next_node;
         }
     }
 }
-
-#endif
